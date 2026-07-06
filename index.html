@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Warlon's — Tu elección saludable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   WARLON'S · TOKENS (paleta medida de las piezas reales)
+   ============================================================ */
+:root{
+  --naranja:        #EF6B1A;
+  --naranja-hondo:  #C0550F;
+  --verde-logo:     #3F8C00;
+  --verde-cont:     #61A246;
+  --verde-lima:     #A4C843;
+  --verde-bosque:   #13421F;
+  --amarillo:       #F7ED7A;
+  --crema:          #F6F0E4;
+  --tinta:          #13421F;
+  --blanco:         #FFFFFF;
+
+  --radio-card: 22px;
+  --radio-pill: 999px;
+  --glass-bg: rgba(255,255,255,.14);
+  --glass-line: rgba(255,255,255,.28);
+  --sombra-suave: 0 12px 32px rgba(19,66,31,.16);
+  --f-display: 'Fredoka', sans-serif;
+  --f-body: 'Quicksand', sans-serif;
+  --f-mono: 'Space Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--f-body);background:var(--naranja);color:var(--tinta);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ===== Texturas de marca ===== */
+.tex-papel::before{
+  content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.02' numOctaves='3' seed='7'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.35 0.35 0.35 0 0'/%3E%3CfeComposite operator='in' in2='SourceGraphic'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' fill='white'/%3E%3C/svg%3E");
+  mix-blend-mode:soft-light;
+}
+.patron-w{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;
+  font-family:var(--f-display);font-weight:700;color:var(--naranja-hondo);
+  opacity:.55;font-size:64px;line-height:.92;letter-spacing:.08em;
+  word-break:break-all;user-select:none;
+}
+.corrugado{
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(255,255,255,.06) 0 6px, rgba(0,0,0,0) 6px 34px,
+      rgba(0,0,0,.07) 34px 40px, rgba(0,0,0,0) 40px 68px),
+    var(--verde-cont);
+}
+
+/* ===== Nav glass ===== */
+.nav{
+  position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);left:50%;
+  transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:14px;
+  padding:10px 18px 10px 12px;border-radius:var(--radio-pill);
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  backdrop-filter:blur(18px) saturate(1.6);-webkit-backdrop-filter:blur(18px) saturate(1.6);
+  box-shadow:0 8px 28px rgba(0,0,0,.18);
+}
+.nav .logo-w{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;
+  background:var(--blanco);color:var(--verde-logo);
+  font-family:var(--f-display);font-weight:700;font-size:22px;line-height:1}
+.nav a{color:var(--blanco);text-decoration:none;font-weight:700;font-size:14px;letter-spacing:.02em}
+
+/* ===== Hero ===== */
+.hero{
+  position:relative;min-height:100svh;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;text-align:center;
+  padding:120px 24px 90px;background:var(--naranja);overflow:hidden;
+  isolation:isolate;z-index:1;   /* aísla el h1: ya no puede pintar sobre la sección pineada */
+}
+.hero h1{font-family:var(--f-display);font-weight:700;
+  font-size:clamp(52px,14vw,110px);line-height:.95;color:var(--blanco);
+  letter-spacing:.01em;position:relative;z-index:2}
+.hero .tag{margin-top:16px;position:relative;z-index:2;display:inline-block;
+  padding:10px 22px;border-radius:var(--radio-pill);background:var(--verde-lima);
+  color:var(--verde-bosque);font-weight:700;font-size:15px;letter-spacing:.06em;
+  text-transform:uppercase}
+.hero .hint{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 26px);
+  left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,.85);
+  font-weight:600;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.hint .rueda{width:24px;height:38px;border:2px solid rgba(255,255,255,.8);
+  border-radius:14px;position:relative}
+.hint .rueda::after{content:'';position:absolute;top:7px;left:50%;width:4px;height:8px;
+  transform:translateX(-50%);border-radius:4px;background:var(--blanco);
+  animation:rodar 1.6s ease-in-out infinite}
+@keyframes rodar{0%{opacity:1;top:7px}70%{opacity:0;top:20px}100%{opacity:0;top:7px}}
+
+/* ============================================================
+   SECCIÓN ESTRELLA — el bowl REAL cae, gira y se etiqueta
+   ============================================================ */
+.armado{
+  position:relative;z-index:2;height:100svh;overflow:hidden;
+  background:linear-gradient(180deg,var(--naranja) 0%, #F0813A 55%, var(--verde-cont) 140%);
+}
+.armado .escena{position:absolute;inset:0;display:grid;place-items:center}
+.armado h2{
+  position:absolute;top:calc(env(safe-area-inset-top,0px) + 84px);width:100%;
+  text-align:center;z-index:5;font-family:var(--f-display);font-weight:700;
+  color:var(--blanco);font-size:clamp(26px,7vw,44px);padding:0 24px;text-wrap:balance;
+}
+.armado h2 .sub{display:block;font-family:var(--f-body);font-weight:600;font-size:14px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--amarillo);margin-bottom:8px}
+
+.plato-zona{position:relative;width:min(82vw,380px);aspect-ratio:1;z-index:3}
+/* El sticker circular real: foto del bowl con el aro "WARLON'S" */
+.sticker{
+  position:absolute;inset:0;border-radius:50%;overflow:hidden;
+  box-shadow:0 30px 60px rgba(19,66,31,.35), 0 0 0 6px rgba(255,255,255,.15);
+  will-change:transform;
+}
+.sticker img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Etiquetas de ingredientes (estilo de sus posts de IG: EMOJI + PALABRA) */
+.etq{
+  position:absolute;z-index:6;display:flex;align-items:center;gap:8px;
+  padding:9px 16px;border-radius:var(--radio-pill);
+  background:rgba(255,255,255,.92);color:var(--verde-bosque);
+  font-weight:700;font-size:14px;letter-spacing:.04em;
+  box-shadow:0 10px 24px rgba(19,66,31,.25);white-space:nowrap;
+  will-change:transform;backdrop-filter:blur(6px);
+}
+.etq .emoji{font-size:18px}
+/* Posiciones FINALES alrededor del bowl */
+.etq--1{top:-4%;left:-6%}
+.etq--2{top:14%;right:-10%}
+.etq--3{top:52%;left:-14%}
+.etq--4{bottom:8%;right:-6%}
+.etq--5{bottom:-6%;left:14%}
+
+/* Ticket final */
+.ticket-pop{
+  position:absolute;z-index:8;bottom:-24%;left:50%;
+  transform:translateX(-50%) translateY(30px);opacity:0;
+  background:var(--crema);border-radius:16px;padding:14px 20px;
+  box-shadow:var(--sombra-suave);text-align:center;min-width:240px;
+}
+.ticket-pop .no{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;
+  color:#8a7f6d;display:flex;justify-content:space-between;gap:24px;
+  border-bottom:1.5px dashed #cfc4ae;padding-bottom:8px;margin-bottom:8px}
+.ticket-pop .nombre{font-family:var(--f-display);font-weight:600;
+  color:var(--verde-bosque);font-size:19px}
+.ticket-pop .precio{display:inline-block;margin-top:8px;background:var(--verde-lima);
+  color:var(--verde-bosque);font-weight:700;font-size:15px;padding:5px 14px;border-radius:8px}
+
+.w-flotante{position:absolute;font-family:var(--f-display);font-weight:700;
+  color:rgba(255,255,255,.16);z-index:1;user-select:none;pointer-events:none}
+
+/* ============================================================
+   MENÚ — verde contenedor + fotos reales
+   ============================================================ */
+.menu{position:relative;padding:76px 20px 60px;color:var(--blanco)}
+.menu .marco{max-width:520px;margin:0 auto;position:relative;z-index:2}
+.menu h2{font-family:var(--f-display);font-weight:700;color:var(--amarillo);
+  font-size:clamp(34px,9vw,52px);letter-spacing:.02em;text-decoration:underline;
+  text-decoration-thickness:4px;text-underline-offset:10px;margin-bottom:10px}
+.menu .intro{font-weight:600;opacity:.92;margin-bottom:28px;font-size:15px}
+.chips{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 18px;scrollbar-width:none;
+  position:sticky;top:calc(env(safe-area-inset-top,0px) + 74px);z-index:6}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;padding:10px 18px;border-radius:var(--radio-pill);
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:var(--blanco);font-weight:700;font-size:14px;cursor:pointer;
+  transition:background .25s,color .25s}
+.chip.activo{background:var(--amarillo);color:var(--verde-bosque);border-color:transparent}
+
+.card{
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border-radius:var(--radio-card);overflow:hidden;margin-bottom:14px;
+  box-shadow:0 8px 24px rgba(19,66,31,.14);
+  opacity:0;transform:translateY(34px);
+}
+.card .cuerpo{padding:20px 20px 18px}
+.card h3{font-family:var(--f-display);font-weight:600;font-size:19px;
+  letter-spacing:.02em;color:var(--blanco)}
+.card p{font-size:14px;font-weight:500;opacity:.9;margin-top:6px;line-height:1.5}
+.card .precio{display:inline-block;margin-top:12px;background:var(--verde-lima);
+  color:var(--verde-bosque);font-weight:700;font-size:15px;padding:6px 16px;border-radius:9px}
+/* Cards con foto real: la comida manda */
+.card--foto img{width:100%;aspect-ratio:5/4;object-fit:cover;display:block}
+.card--foto .cuerpo{margin-top:-46px;position:relative;
+  background:linear-gradient(180deg,transparent,rgba(19,66,31,.72) 34%);
+  backdrop-filter:none;-webkit-backdrop-filter:none;padding-top:56px}
+
+/* ============================================================
+   PEDIDOS / SUCURSALES / REDES
+   ============================================================ */
+.footer{position:relative;background:var(--naranja);color:var(--blanco);
+  text-align:center;padding:70px 24px calc(env(safe-area-inset-bottom,0px) + 60px);
+  overflow:hidden}
+.footer .w-big{font-family:var(--f-display);font-weight:700;font-size:70px;
+  color:var(--amarillo);line-height:1;position:relative;z-index:2}
+.footer .lema{position:relative;z-index:2;margin-top:6px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;font-size:13px;color:var(--amarillo)}
+.footer h3{position:relative;z-index:2;font-family:var(--f-display);font-weight:600;
+  font-size:17px;margin:34px 0 14px;letter-spacing:.06em;text-transform:uppercase}
+.botones-delivery{position:relative;z-index:2;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-app{
+  display:inline-flex;align-items:center;gap:10px;padding:14px 26px;
+  border-radius:var(--radio-pill);font-weight:700;text-decoration:none;font-size:16px;
+  transition:transform .2s;font-family:var(--f-display);letter-spacing:.02em;
+}
+.btn-app:active{transform:scale(.96)}
+.btn-monchis{background:var(--crema);color:#E4002B}
+.btn-pya{background:#FA0050;color:var(--blanco)}
+.sucursales{position:relative;z-index:2;display:flex;flex-direction:column;gap:10px;
+  max-width:420px;margin:0 auto}
+.sucursal{
+  display:flex;align-items:center;gap:12px;text-align:left;
+  padding:14px 18px;border-radius:16px;text-decoration:none;color:var(--blanco);
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  transition:transform .2s;
+}
+.sucursal:active{transform:scale(.98)}
+.sucursal .pin{font-size:20px}
+.sucursal .datos b{display:block;font-family:var(--f-display);font-weight:600;font-size:15px}
+.sucursal .datos span{font-size:13px;font-weight:600;opacity:.85}
+.redes{position:relative;z-index:2;display:flex;gap:12px;justify-content:center;margin-top:30px}
+.red{
+  width:52px;height:52px;border-radius:18px;display:grid;place-items:center;
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  color:var(--blanco);text-decoration:none;transition:transform .2s;
+}
+.red:active{transform:scale(.92)}
+.footer .creditos{position:relative;z-index:2;margin-top:34px;font-size:12px;
+  font-weight:600;opacity:.75}
+
+
+/* ===== Modal de foto ===== */
+.card--foto img, .sticker{cursor:pointer}
+.modal{
+  position:fixed;inset:0;z-index:99;display:grid;place-items:center;padding:22px;
+  background:rgba(19,66,31,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal.on{opacity:1;pointer-events:auto}
+.modal figure{
+  border-radius:24px;overflow:hidden;line-height:0;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);transform:scale(.92);transition:transform .25s;
+}
+.modal.on figure{transform:scale(1)}
+.modal img{display:block;max-width:min(92vw,600px);max-height:84vh;width:auto;height:auto;object-fit:contain}
+.modal .cerrar{
+  position:absolute;top:calc(env(safe-area-inset-top,0px) + 16px);right:16px;
+  width:44px;height:44px;border-radius:16px;border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.18);backdrop-filter:blur(10px);color:#fff;
+  font-size:20px;font-weight:700;cursor:pointer;
+}
+
+@media (prefers-reduced-motion: reduce){.hint .rueda::after{animation:none}}
+@media (min-width:760px){
+  .hero h1{font-size:120px}
+  .menu .marco{max-width:640px}
+  .etq--1{left:2%}.etq--2{right:-4%}.etq--3{left:-8%}.etq--4{right:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= NAV ================= -->
+<nav class="nav">
+  <div class="logo-w">W</div>
+  <a href="#menu">Menú</a>
+  <a href="#pedidos">Pedí ya</a>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero tex-papel">
+  <div class="patron-w" aria-hidden="true" id="patronHero"></div>
+  <h1>WARLON'S</h1>
+  <span class="tag">Tu elección saludable 💚</span>
+  <div class="hint">
+    <div class="rueda"></div>
+    Deslizá, que baja el bowl
+  </div>
+</header>
+
+<!-- ================= SECCIÓN ESTRELLA ================= -->
+<section class="armado" id="armado">
+  <h2><span class="sub">Hecho al momento</span>Fresco de verdad, todos los días</h2>
+
+  <span class="w-flotante" data-depth="0.3" style="top:18%;left:8%;font-size:54px">W</span>
+  <span class="w-flotante" data-depth="0.6" style="top:30%;right:6%;font-size:80px">W</span>
+  <span class="w-flotante" data-depth="0.45" style="bottom:14%;left:12%;font-size:64px">W</span>
+
+  <div class="escena">
+    <div class="plato-zona">
+
+      <!-- FOTO REAL: bowl teriyaki con el aro WARLON'S -->
+      <div class="sticker" id="sticker">
+        <img src="img/bowl-sticker.jpg" data-full="img/full/bowl-post.jpg" alt="Bowl teriyaki de pollo Warlon's, recién armado">
+      </div>
+
+      <!-- Etiquetas: vuelan desde los costados a distintas velocidades
+           data-dx / data-dy = punto de partida (px)
+           data-giro = rotación inicial · data-veloc = velocidad parallax -->
+      <div class="etq etq--1" data-dx="-320" data-dy="-160" data-giro="-14" data-veloc="1.3"><span class="emoji">🤤</span>POLLO</div>
+      <div class="etq etq--2" data-dx="340"  data-dy="-120" data-giro="10"  data-veloc="0.85"><span class="emoji">😍</span>HUEVO</div>
+      <div class="etq etq--3" data-dx="-360" data-dy="80"   data-giro="8"   data-veloc="1.5"><span class="emoji">😎</span>ZANAHORIA</div>
+      <div class="etq etq--4" data-dx="330"  data-dy="140"  data-giro="-9"  data-veloc="1.1"><span class="emoji">😱</span>REPOLLO MORADO</div>
+      <div class="etq etq--5" data-dx="-280" data-dy="260"  data-giro="12"  data-veloc="0.7"><span class="emoji">🔥</span>TERIYAKI</div>
+
+      <!-- Ticket final -->
+      <div class="ticket-pop" id="ticketPop">
+        <div class="no"><span>TICKET</span><span>NO. 205</span></div>
+        <div class="nombre">Bowl Teriyaki de Pollo</div>
+        <span class="precio">35.000 GS.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MENÚ ================= -->
+<main class="menu corrugado tex-papel" id="menu">
+  <div class="marco">
+    <h2>MENÚ</h2>
+    <p class="intro">Todo fresco, todo al día. Elegí tu categoría:</p>
+
+    <div class="chips" role="tablist">
+      <button class="chip activo" data-cat="wraps">Wraps</button>
+      <button class="chip" data-cat="sandwiches">Sandwiches</button>
+      <button class="chip" data-cat="ensaladas">Ensaladas</button>
+      <button class="chip" data-cat="pokes">Pokes</button>
+      <button class="chip" data-cat="postres">Postres</button>
+      <button class="chip" data-cat="bebidas">Bebidas</button>
+    </div>
+
+    <div id="listado"></div>
+  </div>
+</main>
+
+<!-- ================= PEDIDOS / SUCURSALES / REDES ================= -->
+<footer class="footer tex-papel" id="pedidos">
+  <div class="patron-w" aria-hidden="true" id="patronFooter"></div>
+  <div class="w-big">W</div>
+  <p class="lema">Tu elección saludable 💚</p>
+
+  <h3>🛵 Pedí por delivery</h3>
+  <div class="botones-delivery">
+    <a class="btn-app btn-monchis" href="https://www.monchis.com.py" target="_blank" rel="noopener">Monchis</a>
+    <a class="btn-app btn-pya" href="https://www.pedidosya.com.py" target="_blank" rel="noopener">PedidosYa</a>
+  </div>
+
+  <h3>📍 Nuestras sucursales</h3>
+  <div class="sucursales">
+    <a class="sucursal" href="https://www.google.com/maps/search/?api=1&query=Warlon%27s+Shopping+Mall+Excelsior+Asunci%C3%B3n" target="_blank" rel="noopener">
+      <span class="pin">📍</span>
+      <span class="datos"><b>Centro · Shopping Mall Excelsior</b><span>Chile c/ Manduvirá, Asunción</span></span>
+    </a>
+    <a class="sucursal" href="https://maps.app.goo.gl/QR5NLhGebdJPLREP8" target="_blank" rel="noopener">
+      <span class="pin">📍</span>
+      <span class="datos"><b>Aviadores del Chaco</b><span>Aviadores del Chaco c/ Cañada</span></span>
+    </a>
+    <a class="sucursal" href="https://maps.app.goo.gl/jJ9ThQvA7oCtATD8A" target="_blank" rel="noopener">
+      <span class="pin">📍</span>
+      <span class="datos"><b>Mariscal López</b><span>Mcal. López y Dr. Morra</span></span>
+    </a>
+  </div>
+
+  <div class="redes">
+    <a class="red" href="https://www.instagram.com/warlonspy" target="_blank" rel="noopener" aria-label="Instagram de Warlon's">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.6" cy="6.4" r="1.2" fill="currentColor" stroke="none"/></svg>
+    </a>
+  </div>
+
+  <p class="creditos">Warlon's · Asunción, Paraguay</p>
+</footer>
+
+
+<!-- ================= MODAL FOTO ================= -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <button class="cerrar" aria-label="Cerrar" onclick="cerrarModal()">✕</button>
+  <figure>
+    <img id="modalImg" src="" alt="">
+  </figure>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ============ DATOS DEL MENÚ (de la carta real) ============ */
+const MENU = {
+  wraps: [
+    ["Caesar de Pollo","Pollo desmechado, panceta, lechuga, crutones, queso parmesano y salsa caesar.","32.000","img/wrap-caesar-pollo.jpg","img/full/wrap-caesar-pollo.jpg"],
+    ["Caesar de Salmón","Salmón, panceta, lechuga, crutones, queso parmesano y salsa caesar.","42.000"],
+    ["Lomito","Lomito, repollo, queso mozzarella y mayo Warlon's.","35.000"],
+    ["Salmón Warlon's","Salmón, aguacate, lechuga, cebolla morada y queso crema.","44.000"],
+    ["Atún","Atún, huevo duro, cebolla morada, tomate y mayo Warlon's.","35.000"],
+    ["Champiñones","Champiñones, tomate, lechuga, queso mozzarella y salsa pesto.","39.000"],
+    ["Huevo","Huevo revuelto, tomate, panceta y queso mozzarella.","27.000","img/wrap-huevo.jpg","img/full/wrap-huevo.jpg"],
+  ],
+  sandwiches: [
+    ["Desmechado de Pollo","Pollo desmechado, queso catupiry, tomate, lechuga y pan ciabatta.",null,"img/sandwich-desmechado-pollo.jpg","img/full/sandwich-desmechado-pollo.jpg"],
+    ["Club Sandwich","Pollo, panceta, queso mozzarella, lechuga, tomate y mayo Warlon's.","42.000"],
+    ["Lomito","Lomito, lechuga, tomate, queso mozzarella y mayo Warlon's.","36.000"],
+    ["Atún","Atún, huevo, lechuga, tomate y mayo Warlon's.","25.000"],
+    ["Desmechado de Vacío","Vacío desmechado, lechuga, tomate y salsa cheddar.","45.000"],
+  ],
+  ensaladas: [
+    ["Caesar de Pollo","Pollo en cubos, panceta, crutones, queso parmesano, lechuga y salsa caesar.","32.000","img/ensalada-caesar-pollo.jpg","img/full/ensalada-caesar-pollo.jpg"],
+    ["Salmón con Queso Azul","Salmón crudo, lechuga, rúcula, berro, queso azul y salsa de queso azul.","40.000","img/ensalada-salmon-queso-azul.jpg","img/full/ensalada-salmon-queso-azul.jpg"],
+    ["Mediterránea","Pollo en cubos, aguacate, huevo, tomate, cebolla morada y lechuga.","32.000","img/ensalada-mediterranea.jpg","img/full/ensalada-mediterranea.jpg"],
+    ["Mix de Verdes y Frutos Secos","Frutos secos, lechuga, berro, rúcula y vinagreta de naranja.","28.000"],
+    ["Capresse","Lechuga, tomate, rúcula, queso mozzarella y salsa pesto.","26.000"],
+  ],
+  pokes: [
+    ["Pollo Teriyaki y Champiñones · base arroz","Pollo en cubos, champiñones, repollo morado, zanahoria, morrón, cebolla morada y salsa teriyaki.","35.000","img/poke-arroz.jpg","img/full/poke-arroz.jpg"],
+    ["Pollo Teriyaki y Champiñones · base quinoa","La misma bomba saludable, con quinoa.","40.000"],
+  ],
+  postres: [
+    ["Açai","Açai con banana, granola y leche en polvo descremada.","20.000","img/postre-acai.jpg","img/full/postre-acai.jpg"],
+  ],
+  bebidas: [
+    ["Jugo Verde","Verde, fresco y lleno de energía. Recién exprimido.","15.000","img/bebida-jugo-verde.jpg","img/full/bebida-jugo-verde.jpg"],
+    ["Jugo de Naranja","Rico en vitamina C, recién exprimido.","15.000"],
+    ["Jugo de Limón","Refrescante y natural.","15.000"],
+    ["Jugo de Piña","Nada mejor que un jugo fresco.","15.000"],
+    ["Agua sin gas","","5.000"],
+    ["Coca Cola / Zero (500ml)","","8.000"],
+    ["Sprite / Zero (500ml)","","8.000"],
+  ],
+};
+
+/* ============ Patrón W ============ */
+const llenarPatron = el => { if (el) el.textContent = 'W '.repeat(600); };
+llenarPatron(document.getElementById('patronHero'));
+llenarPatron(document.getElementById('patronFooter'));
+
+/* ============ Render del menú ============ */
+const listado = document.getElementById('listado');
+function renderCat(cat){
+  const tag = p => p ? `<span class="precio">${p} GS.</span>` : `<span class="precio">¡Nuevo! 🔥</span>`;
+  listado.innerHTML = MENU[cat].map(([n,d,p,foto,full]) => foto ? `
+    <article class="card card--foto">
+      <img src="${foto}" data-full="${full||foto}" alt="${n}" loading="lazy">
+      <div class="cuerpo">
+        <h3>${n}</h3>${d?`<p>${d}</p>`:''}${tag(p)}
+      </div>
+    </article>` : `
+    <article class="card">
+      <div class="cuerpo">
+        <h3>${n}</h3>${d?`<p>${d}</p>`:''}${tag(p)}
+      </div>
+    </article>`).join('');
+  revelarCards();
+}
+document.querySelectorAll('.chip').forEach(ch => {
+  ch.addEventListener('click', () => {
+    document.querySelector('.chip.activo')?.classList.remove('activo');
+    ch.classList.add('activo');
+    renderCat(ch.dataset.cat);
+    /* Subir al inicio de la lista (compensando nav + chips sticky) */
+    const offset = 150;
+    const y = listado.getBoundingClientRect().top + window.scrollY - offset;
+    if (Math.abs(window.scrollY - y) > 40) window.scrollTo({top: y, behavior: 'smooth'});
+  });
+});
+
+/* ============================================================
+   GSAP · escena estrella con FOTO REAL
+   ============================================================ */
+gsap.registerPlugin(ScrollTrigger);
+const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if (!reducido){
+  /* Estado inicial: el bowl arriba y girado, las etiquetas fuera de escena */
+  gsap.set('#sticker', {y: '-120vh', rotation: -160, scale: .65});
+  gsap.utils.toArray('.etq').forEach(e => gsap.set(e, {
+    x: +e.dataset.dx, y: +e.dataset.dy,
+    rotation: +e.dataset.giro, opacity: 0, scale: .7
+  }));
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.armado',
+      start: 'top top',
+      end: '+=280%',
+      scrub: 0.6,          // menos inercia: no queda "colgado" al subir rápido
+      pin: true,
+      anticipatePin: 1,
+      fastScrollEnd: true  // completa los tweens si el scroll fue violento
+    }
+  });
+
+  /* 1. El bowl real cae girando como un sticker que se pega */
+  tl.to('#sticker', {y: 0, rotation: 0, scale: 1, duration: 1.6, ease: 'power2.out'}, 0)
+    .to('#sticker', {scale: 1.05, duration: .15, ease: 'power1.out'}, '>')
+    .to('#sticker', {scale: 1, duration: .35, ease: 'elastic.out(1,.45)'}, '>');
+
+  /* 2. Las etiquetas vuelan a su lugar, cada una a su velocidad (parallax) */
+  gsap.utils.toArray('.etq').forEach((e, i) => {
+    tl.to(e, {
+      x: 0, y: 0, rotation: 0, opacity: 1, scale: 1,
+      duration: 1 / +e.dataset.veloc,
+      ease: 'back.out(1.4)'
+    }, 1.2 + i * 0.3);
+  });
+
+  /* 3. El aro sigue girando lento mientras dure el pin (guiño slosh) */
+  gsap.to('#sticker', {
+    rotation: '+=48', ease: 'none',
+    scrollTrigger: {trigger:'.armado', start:'top top', end:'+=280%', scrub: 0.6, fastScrollEnd: true}
+  });
+
+  /* 4. Ticket de recompensa */
+  tl.to('#ticketPop', {opacity: 1, y: 0, duration: .5, ease: 'back.out(1.6)'}, '>-0.1');
+
+  /* W flotantes con profundidad */
+  gsap.utils.toArray('.w-flotante').forEach(w => {
+    gsap.to(w, {
+      y: () => -220 * +w.dataset.depth, ease: 'none',
+      scrollTrigger: {trigger:'.armado', start:'top bottom', end:'bottom top', scrub: true}
+    });
+  });
+}
+
+/* Reveal de cards */
+function revelarCards(){
+  const cards = gsap.utils.toArray('.card');
+  if (reducido){ gsap.set(cards, {opacity:1, y:0}); return; }
+  ScrollTrigger.batch(cards, {
+    start: 'top 88%', once: true,
+    onEnter: b => gsap.to(b, {opacity:1, y:0, duration:.6, stagger:.08, ease:'power3.out'})
+  });
+  ScrollTrigger.refresh();
+}
+
+
+/* ============ Modal lightbox ============ */
+const modal = document.getElementById('modal');
+function abrirModal(src, nombre){
+  document.getElementById('modalImg').src = src;
+  document.getElementById('modalImg').alt = nombre || '';
+  modal.classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarModal(){
+  modal.classList.remove('on');
+  document.body.style.overflow = '';
+}
+modal.addEventListener('click', e => { if (e.target === modal) cerrarModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
+/* Delegación: cualquier foto de card abre el modal */
+document.getElementById('listado').addEventListener('click', e => {
+  const card = e.target.closest('.card--foto');
+  if (!card || e.target.tagName !== 'IMG') return;
+  const img = card.querySelector('img');
+  abrirModal(img.dataset.full || img.src, card.querySelector('h3').textContent);
+});
+/* El bowl del hero también */
+document.getElementById('sticker').addEventListener('click', () =>
+  abrirModal(document.querySelector('#sticker img').dataset.full, 'Bowl Teriyaki de Pollo'));
+
+renderCat('wraps');
+</script>
+</body>
+</html>
